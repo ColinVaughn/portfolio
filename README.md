@@ -36,7 +36,7 @@ Open-source AI agent platform. 9-crate Rust workspace with Tauri + React desktop
 
 **Source:** [github.com/Omni-App-AI/Omni](https://github.com/Omni-App-AI/Omni)
 
-**License:** MIT
+**License:** GPL
 
 ### A11yCore (Coming Soon)
 
