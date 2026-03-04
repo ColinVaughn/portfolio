@@ -1,0 +1,31 @@
+[package]
+name = "relay-core"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+relay-common = { path = "../relay-common" }
+relay-quic = { path = "../relay-quic" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+reqwest = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+base64 = { workspace = true }
+axum = "0.8"
+clap = { version = "4", features = ["derive", "env"] }
+defguard_wireguard_rs = "0.7"
+rand = "0.8"
+x25519-dalek = { version = "2", features = ["static_secrets"] }
+tower = { version = "0.5", features = ["limit", "buffer", "timeout"] }
+tower-http = { version = "0.6", features = ["cors", "trace"] }
+metrics = "0.24"
+metrics-exporter-prometheus = "0.16"
+bitflags = "2"
+bincode = "1"
+rustls = { version = "0.23", features = ["ring"] }

@@ -1,0 +1,36 @@
+{
+  "name": "tunnely",
+  "private": true,
+  "version": "0.1.2",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@solidjs/router": "^0.15.3",
+    "@tauri-apps/api": "^2.2.0",
+    "@tauri-apps/plugin-cli": "^2.4.1",
+    "@tauri-apps/plugin-shell": "^2.2.0",
+    "d3-geo": "^3.1.1",
+    "d3-selection": "^3.0.0",
+    "solid-js": "^1.9.5",
+    "topojson-client": "^3.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.8",
+    "@tauri-apps/cli": "^2.4.0",
+    "@types/d3-geo": "^3.1.0",
+    "@types/d3-selection": "^3.0.11",
+    "@types/d3-zoom": "^3.0.8",
+    "@types/topojson-client": "^3.1.5",
+    "@types/topojson-specification": "^1.0.5",
+    "d3-zoom": "^3.0.0",
+    "tailwindcss": "^4.1.8",
+    "typescript": "~5.7.2",
+    "vite": "^6.3.5",
+    "vite-plugin-solid": "^2.11.6"
+  }
+}

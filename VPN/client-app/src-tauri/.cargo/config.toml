@@ -1,0 +1,5 @@
+# Workaround for Windows file-lock issues (os error 32).
+# Limits concurrent compiler jobs to reduce file contention
+# with rust-analyzer and Windows Defender real-time scanning.
+[build]
+jobs = 2

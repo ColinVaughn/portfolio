@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colin Vaughn - Resume</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page {
+    size: letter;
+    margin: 0;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1a1a1a;
+    background: #f0f0f0;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    margin: 0 auto;
+    background: linear-gradient(to right, #111827 2.6in, #fff 2.6in);
+    display: grid;
+    grid-template-columns: 2.6in 1fr;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ---- LEFT SIDEBAR ---- */
+  .sidebar {
+    background: #111827;
+    color: #e5e7eb;
+    padding: 0.55in 0.35in 0.5in 0.35in;
+  }
+
+  .sidebar h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+
+  .sidebar .tagline {
+    font-size: 11px;
+    font-weight: 400;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 4px;
+    margin-bottom: 28px;
+  }
+
+  .sidebar h2 {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: #60a5fa;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #374151;
+  }
+
+  .sidebar .section { margin-bottom: 26px; }
+
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 11.5px;
+    color: #d1d5db;
+    letter-spacing: 0.015em;
+  }
+
+  .contact-item .icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    fill: #60a5fa;
+  }
+
+  .contact-item a {
+    color: #d1d5db;
+    text-decoration: none;
+  }
+
+  .contact-item a:hover { color: #fff; }
+
+  .skill-group { margin-bottom: 14px; }
+
+  .skill-group-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #d1d5db;
+    margin-bottom: 6px;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .skill-tag {
+    background: #1f2937;
+    color: #93c5fd;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 4px;
+    border: 1px solid #374151;
+  }
+
+  .edu-entry { margin-bottom: 14px; }
+
+  .edu-school {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .edu-detail {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 2px;
+  }
+
+  /* ---- MAIN CONTENT ---- */
+  .main {
+    padding: 0.55in 0.45in 0.5in 0.45in;
+  }
+
+  .main .section { margin-bottom: 26px; }
+
+  .main h2 {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: #111827;
+    margin-bottom: 16px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #111827;
+  }
+
+  .summary {
+    font-size: 12.5px;
+    color: #374151;
+    line-height: 1.65;
+    letter-spacing: 0.015em;
+  }
+
+  /* Experience cards */
+  .exp-entry { margin-bottom: 22px; }
+
+  .exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2px;
+  }
+
+  .exp-role, h3.exp-role {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .exp-date {
+    font-size: 10px;
+    font-weight: 500;
+    color: #6b7280;
+    white-space: nowrap;
+  }
+
+  .exp-company {
+    font-size: 12px;
+    font-weight: 500;
+    color: #2563eb;
+    margin-bottom: 6px;
+  }
+
+  .exp-bullets {
+    list-style: none;
+    padding: 0;
+  }
+
+  .exp-bullets li {
+    font-size: 11.5px;
+    color: #374151;
+    line-height: 1.6;
+    letter-spacing: 0.015em;
+    padding-left: 14px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+
+  .exp-bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 5px;
+    height: 5px;
+    background: #2563eb;
+    border-radius: 50%;
+  }
+
+  /* Projects */
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .project-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .project-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .project-url {
+    font-size: 10px;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .project-desc {
+    font-size: 10.5px;
+    color: #6b7280;
+    margin-top: 4px;
+    line-height: 1.5;
+    letter-spacing: 0.015em;
+  }
+
+  /* Prevent entries from splitting across pages */
+  .exp-entry {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .project-grid {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .page {
+      margin: 0;
+      box-shadow: none;
+      min-height: 0;
+      height: auto;
+      background: linear-gradient(to right, #111827 2.6in, #fff 2.6in);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .sidebar {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .exp-entry {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .project-grid {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h1>Colin<br>Vaughn</h1>
+    <div class="tagline">Software Developer</div>
+
+    <div class="section">
+      <h2 class="section-title">Contact</h2>
+      <div class="contact-item">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+        <span>Clemson, SC</span>
+      </div>
+      <div class="contact-item">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <a href="mailto:colinvaughn01@gmail.com">colinvaughn01@gmail.com</a>
+      </div>
+      <div class="contact-item">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57.55 0 1 .45 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.46.57 3.58a1 1 0 0 1-.24 1.01l-2.2 2.2z"/></svg>
+        <a href="tel:8436801187">(843) 680-1187</a>
+      </div>
+      <div class="contact-item">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+        <a href="https://linkedin.com/in/colin-vaughn">linkedin.com/in/colin-vaughn</a>
+      </div>
+      <div class="contact-item">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        <a href="https://colinvaughn.xyz">colinvaughn.xyz</a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Skills</h2>
+      <div class="skill-group">
+        <div class="skill-group-label">Languages</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Rust</span>
+          <span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">C#</span>
+          <span class="skill-tag">HTML/CSS</span>
+          <span class="skill-tag">SQL</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label">Frameworks & Tools</div>
+        <div class="skill-tags">
+          <span class="skill-tag">React</span>
+          <span class="skill-tag">Tauri</span>
+          <span class="skill-tag">Node.js</span>
+          <span class="skill-tag">WireGuard</span>
+          <span class="skill-tag">WebAssembly</span>
+          <span class="skill-tag">Docker</span>
+          <span class="skill-tag">SQLite</span>
+          <span class="skill-tag">Supabase</span>
+          <span class="skill-tag">Stripe</span>
+          <span class="skill-tag">Unity</span>
+          <span class="skill-tag">Git</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label">Domains</div>
+        <div class="skill-tags">
+          <span class="skill-tag">AI / LLM Systems</span>
+          <span class="skill-tag">Networking / VPN</span>
+          <span class="skill-tag">Systems Programming</span>
+          <span class="skill-tag">Full-Stack Web</span>
+          <span class="skill-tag">Security Architecture</span>
+          <span class="skill-tag">VR / XR</span>
+          <span class="skill-tag">CDN Systems</span>
+          <span class="skill-tag">Payments</span>
+          <span class="skill-tag">Accessibility</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Education</h2>
+      <div class="edu-entry">
+        <div class="edu-school">Clemson University</div>
+        <div class="edu-detail">Electrical Engineering (Studied)</div>
+        <div class="edu-detail">Aug 2022 &ndash; 2024</div>
+        <div class="edu-detail" style="margin-top:4px; font-style:italic; color:#9ca3af;">Left to pursue software ventures full-time</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <div class="section">
+      <h2 class="section-title">Summary</h2>
+      <div class="summary">
+        Software engineer and founder with experience spanning Rust systems programming, full-stack web development, and AI agent architecture. Built and shipped multiple production platforms as a solo developer&mdash;including a Virtual Private Network (VPN) with WireGuard encryption and mesh networking, an open-source Large Language Model (LLM) agent platform with WebAssembly (WASM) sandboxing, and an accessibility compliance Software as a Service (SaaS) with real-time Web Content Accessibility Guidelines (WCAG) scanning. Left Clemson University&rsquo;s Electrical Engineering program to pursue software ventures full-time.
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Experience</h2>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <h3 class="exp-role">Founder & Lead Engineer</h3>
+          <div class="exp-date">2024 &ndash; Present</div>
+        </div>
+        <div class="exp-company">Tunnely &middot; tunnely.org</div>
+        <ul class="exp-bullets">
+          <li>Built a full-stack Virtual Private Network (VPN) platform in Rust with a Tauri + Solid.js desktop client, distributed relay server infrastructure, and a Next.js marketing site with Stripe billing</li>
+          <li>Implemented WireGuard-based encrypted tunneling (ChaCha20-Poly1305, Curve25519) using a userspace boringtun stack with async TUN device management</li>
+          <li>Designed a multi-relay mesh network with automatic peer discovery, latency probing, and optimal path computation for multi-hop routing</li>
+          <li>Engineered channel bonding system aggregating multiple network interfaces (WiFi + Ethernet + Cellular) with custom binary protocol, packet reordering, and three bonding modes</li>
+          <li>Developed QUIC obfuscation layer wrapping WireGuard traffic as HTTPS/HTTP3 to bypass ISP-level VPN detection, plus a man-in-the-middle (MITM) HTTPS proxy for client-side ad/tracker blocking</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <h3 class="exp-role">Founder & Lead Engineer</h3>
+          <div class="exp-date">Nov 2025 &ndash; Present</div>
+        </div>
+        <div class="exp-company">Omni &middot; Open Source</div>
+        <ul class="exp-bullets">
+          <li>Architected a privacy-first AI agent platform as a 10-crate Rust workspace with a Tauri + React/TypeScript desktop UI</li>
+          <li>Built a WebAssembly (WASM) extension runtime via Wasmtime/WASI with deny-by-default permissions and 27 native tools</li>
+          <li>Designed a 4-layer anti-injection pipeline (signature, heuristic, machine learning classifier, output validation) to secure Large Language Model (LLM) I/O</li>
+          <li>Implemented multi-provider LLM orchestration supporting OpenAI, Anthropic, Google, Ollama, and Amazon Bedrock with streaming and credential vault</li>
+          <li>Developed 30+ messaging channel integrations (Discord, Slack, Telegram, Teams, etc.) and a visual flowchart automation engine</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <h3 class="exp-role">Founder & Lead Engineer</h3>
+          <div class="exp-date">2025 &ndash; Present</div>
+        </div>
+        <div class="exp-company">A11yCore</div>
+        <ul class="exp-bullets">
+          <li>Built an accessibility compliance Software as a Service (SaaS) platform in React + TypeScript with real-time Web Content Accessibility Guidelines (WCAG) 2.2 scanning, health scoring, and a modularized scanner backed by Supabase and Puppeteer</li>
+          <li>Engineered a standalone JavaScript plugin (14KB ESM) with 76+ deep DOM remediation features including Accessible Rich Internet Applications (ARIA) injection, keyboard trap detection, heading restructuring, and chart accessibility</li>
+          <li>Implemented Stripe subscription billing with Supabase Edge Functions, webhook signature verification, and Row-Level Security for multi-tenant data isolation</li>
+          <li>Developed AI-powered accessibility code fixer and real-time scanning with WebSocket progress updates, screenshot capture, and CSV export across 50+ WCAG rule categories</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <h3 class="exp-role">Founder & Developer</h3>
+          <div class="exp-date">Aug 2024 &ndash; Present</div>
+        </div>
+        <div class="exp-company">BattleforgePC &middot; Remote</div>
+        <ul class="exp-bullets">
+          <li>Built the business from the ground up, developing the full-stack website solo with React, JavaScript, and Supabase</li>
+          <li>Integrated Stripe for payment processing and ChatGPT API for enhanced user functionality</li>
+          <li>Architected the database, authentication flows, and deployment pipeline end-to-end</li>
+          <li>Optimized performance and maintained site stability as user traffic scaled</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <h3 class="exp-role">Independent Game Developer</h3>
+          <div class="exp-date">Aug 2023 &ndash; Present</div>
+        </div>
+        <div class="exp-company">Self-Employed</div>
+        <ul class="exp-bullets">
+          <li>Developing a VR police training simulator in C# targeting licensing deals with police academies nationwide</li>
+          <li>Handling full product lifecycle: design, development, testing, and business development</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <h3 class="exp-role">Software Developer</h3>
+          <div class="exp-date">Aug 2022 &ndash; Aug 2023</div>
+        </div>
+        <div class="exp-company">Critterz NFT</div>
+        <ul class="exp-bullets">
+          <li>Contributed to a 6-person dev team building server software for live online concerts supporting thousands of concurrent users</li>
+          <li>Engineered CDN-like streaming infrastructure to ensure low-latency delivery at scale</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Projects</h2>
+      <div class="project-grid">
+        <div class="project-card">
+          <div class="project-name">A11yCore</div>
+          <div class="project-desc">Accessibility SaaS with real-time WCAG 2.2 scanning, 76+ deep DOM remediation features in a 14KB plugin, and subscription billing</div>
+        </div>
+        <div class="project-card">
+          <div class="project-name">Omni</div>
+          <div class="project-url">omniapp.org</div>
+          <div class="project-desc">Open-source AI agent platform built in Rust with WebAssembly-sandboxed extensions, multi-provider LLM support, 30+ channel integrations, and anti-injection security</div>
+        </div>
+        <div class="project-card">
+          <div class="project-name">Tunnely</div>
+          <div class="project-url">tunnely.org</div>
+          <div class="project-desc">Privacy-focused VPN platform built in Rust with WireGuard encryption, multi-relay mesh networking, channel bonding, and built-in ad/tracker blocking</div>
+        </div>
+        <div class="project-card">
+          <div class="project-name">BattleforgePC</div>
+          <div class="project-desc">E-commerce platform for custom hardware, built with React & Supabase</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

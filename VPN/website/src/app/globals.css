@@ -1,0 +1,238 @@
+@import "tailwindcss";
+
+@theme {
+  /* Rich Dark Theme — carried over from desktop app */
+  --color-bg: #09090b;
+  --color-surface: #121215;
+  --color-surface-hover: #1c1c22;
+  --color-border: #27272a;
+
+  --color-text: #f4f4f5;
+  --color-text-dim: #a1a1aa;
+
+  /* Vibrant Accents */
+  --color-accent: #3b82f6;
+  --color-accent-hover: #60a5fa;
+  --color-purple: #6c3cff;
+  --color-purple-hover: #7c4cff;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+
+  --color-ring: rgba(59, 130, 246, 0.5);
+
+  /* Font families */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-hover);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border);
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(18, 18, 24, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-hover:hover {
+  background: rgba(28, 28, 34, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #6c3cff, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effects */
+.glow-purple {
+  box-shadow: 0 0 20px rgba(108, 60, 255, 0.3);
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+/* Grid background pattern */
+.bg-grid {
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.02) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.3);
+    opacity: 0.5;
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-float {
+  animation: float ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Blog prose styles */
+.prose-custom {
+  line-height: 1.8;
+  color: var(--color-text-dim);
+}
+
+.prose-custom h1,
+.prose-custom h2,
+.prose-custom h3,
+.prose-custom h4 {
+  color: var(--color-text);
+  font-weight: 700;
+  margin-top: 2em;
+  margin-bottom: 0.75em;
+}
+
+.prose-custom h1 {
+  font-size: 2rem;
+}
+.prose-custom h2 {
+  font-size: 1.5rem;
+}
+.prose-custom h3 {
+  font-size: 1.25rem;
+}
+
+.prose-custom p {
+  margin-bottom: 1.25em;
+}
+
+.prose-custom a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-custom a:hover {
+  color: var(--color-accent-hover);
+}
+
+.prose-custom code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--color-surface);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+}
+
+.prose-custom pre {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25em;
+  overflow-x: auto;
+  margin: 1.5em 0;
+}
+
+.prose-custom pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.prose-custom ul,
+.prose-custom ol {
+  padding-left: 1.5em;
+  margin-bottom: 1.25em;
+}
+
+.prose-custom li {
+  margin-bottom: 0.5em;
+}
+
+.prose-custom blockquote {
+  border-left: 3px solid var(--color-purple);
+  padding-left: 1em;
+  margin: 1.5em 0;
+  color: var(--color-text);
+  font-style: italic;
+}
+
+.prose-custom img {
+  border-radius: 12px;
+  margin: 1.5em 0;
+}
+
+.prose-custom hr {
+  border-color: var(--color-border);
+  margin: 2em 0;
+}

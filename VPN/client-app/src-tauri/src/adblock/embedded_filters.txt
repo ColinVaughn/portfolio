@@ -1,0 +1,92 @@
+! Title: RelayVPN Embedded Minimal Filter List
+! Description: Critical ad/tracker domains for first-launch coverage
+! This list is embedded in the binary and used before full lists download
+! Format: AdBlock Plus syntax
+
+! === Top ad networks ===
+||doubleclick.net^
+||googlesyndication.com^
+||googleadservices.com^
+||google-analytics.com^
+||googletagmanager.com^
+||googletagservices.com^
+||adservice.google.com^
+||pagead2.googlesyndication.com^
+
+! === Facebook/Meta tracking ===
+||facebook.net/tr^
+||connect.facebook.net^$third-party
+||pixel.facebook.com^
+||graph.facebook.com/*/activities^
+
+! === Amazon ads ===
+||amazon-adsystem.com^
+||aax.amazon.com^
+||fls-na.amazon.com^
+
+! === Twitter/X tracking ===
+||analytics.twitter.com^
+||ads-api.twitter.com^
+||t.co^$third-party
+
+! === Microsoft ads/tracking ===
+||ads.msn.com^
+||bat.bing.com^
+||c.msn.com^
+||c.bing.com^
+
+! === Common ad exchanges ===
+||adnxs.com^
+||rubiconproject.com^
+||pubmatic.com^
+||openx.net^
+||criteo.com^
+||criteo.net^
+||outbrain.com^
+||taboola.com^
+||mgid.com^
+
+! === Analytics/Tracking ===
+||hotjar.com^$third-party
+||mixpanel.com^$third-party
+||segment.com^$third-party
+||amplitude.com^$third-party
+||newrelic.com^$third-party
+||sentry.io^$third-party
+||bugsnag.com^$third-party
+
+! === Common ad servers ===
+||ad.doubleclick.net^
+||ads.yahoo.com^
+||adserver.yahoo.com^
+||analytics.yahoo.com^
+||moatads.com^
+||serving-sys.com^
+||smartadserver.com^
+
+! === Popup/overlay ads ===
+||popads.net^
+||popcash.net^
+||propellerads.com^
+||revcontent.com^
+||zergnet.com^
+
+! === Cryptomining ===
+||coinhive.com^
+||coin-hive.com^
+||authedmine.com^
+||cryptoloot.pro^
+||crypto-loot.com^
+||minero.cc^
+
+! === Common cosmetic filters ===
+##.ad-container
+##.ad-banner
+##.ad-wrapper
+##.advertisement
+##.ad-slot
+##.adsbygoogle
+##[id^="google_ads"]
+##[id^="div-gpt-ad"]
+##.sponsored-content
+##.sponsored

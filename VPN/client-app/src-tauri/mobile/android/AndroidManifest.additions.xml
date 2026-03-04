@@ -1,0 +1,38 @@
+<!-- 
+  AndroidManifest.xml additions for Tunnely VPN
+  
+  After running `tauri android init`, merge these entries into 
+  gen/android/app/src/main/AndroidManifest.xml inside the <manifest> 
+  and <application> tags.
+-->
+
+<!-- Add these PERMISSIONS inside <manifest> (before <application>): -->
+<!--
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+-->
+
+<!-- Add this SERVICE inside <application>: -->
+<!--
+<service
+    android:name="org.tunnely.client.TunnelyVpnService"
+    android:permission="android.permission.BIND_VPN_SERVICE"
+    android:exported="false"
+    android:foregroundServiceType="specialUse">
+    <intent-filter>
+        <action android:name="android.net.VpnService" />
+    </intent-filter>
+    <meta-data
+        android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON"
+        android:value="true" />
+</service>
+-->
+
+<!-- 
+  NOTES:
+  - FOREGROUND_SERVICE_SPECIAL_USE is required for Android 14+ (API 34)
+  - BIND_VPN_SERVICE permission restricts who can bind to your VPN service
+  - SUPPORTS_ALWAYS_ON enables the "Always-on VPN" toggle in Android settings
+  - The app identifier in tauri.conf.json is "org.tunnely.client"
+-->

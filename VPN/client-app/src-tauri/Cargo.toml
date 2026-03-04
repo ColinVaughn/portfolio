@@ -1,0 +1,72 @@
+[package]
+name = "tunnely-client"
+version = "0.1.2"
+edition = "2021"
+
+[lib]
+name = "tunnely_client_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[[bin]]
+name = "tunnely-client"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+dotenvy = "0.15"
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon"] }
+tauri-plugin-shell = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "stream"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+base64 = "0.22"
+rand = "0.8"
+x25519-dalek = { version = "=2.0.0-rc.3", features = ["static_secrets"] }
+keyring = { version = "3", features = ["apple-native", "windows-native"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+anyhow = "1"
+thiserror = "2"
+chrono = { version = "0.4", features = ["serde"] }
+boringtun = "0.6"
+dirs = "6"
+bitflags = "2"
+if-addrs = "0.13"
+socket2 = { version = "0.5", features = ["all"] }
+libc = "0.2"
+bincode = "1"
+relay-common = { path = "../../relay-server/relay-common" }
+tauri-plugin-deep-link = "2.4.7"
+open = "5.3.3"
+pkce = "0.2.0"
+url = "2.5.8"
+sha2 = "0.10.9"
+futures-util = "0.3"
+
+# ── Desktop-only dependencies (not available on Android/iOS) ──
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri = { version = "2", features = ["tray-icon"] }
+tun2 = { version = "4", features = ["async"] }
+tauri-plugin-cli = "2.4.1"
+# Adblock MITM proxy stack
+hudsucker = { version = "0.22", features = ["rustls-client"] }
+rcgen = "0.13"
+rustls = "0.23"
+rustls-pemfile = "2"
+tokio-rustls = "0.26"
+flate2 = "1"
+brotli = "7"
+http = "1"
+hyper = { version = "1", features = ["full"] }
+http-body-util = "0.1"
+adblock = { version = "0.12.1", default-features = false, features = ["embedded-domain-resolver", "full-regex-handling"] }
+lru = "0.12"
+bytes = "1"
+
+# ── Linux-only keyring backend (D-Bus not available on Android) ──
+[target.'cfg(target_os = "linux")'.dependencies]
+keyring = { version = "3", features = ["sync-secret-service"] }

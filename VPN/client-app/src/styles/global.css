@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+:root {
+  /* Vibrant Accents */
+  --color-accent: #3b82f6; /* Modern Blue */
+  --color-accent-hover: #60a5fa;
+  --color-success: #10b981; /* Emerald */
+  --color-warning: #f59e0b; /* Amber */
+  --color-danger: #ef4444; /* Red */
+  --color-ring: rgba(59, 130, 246, 0.5);
+}
+
+:root, .dark {
+  /* Rich Dark Theme Palette */
+  --color-bg: #09090b; /* Very dark zinc */
+  --color-surface: #121215;
+  --color-surface-hover: #1c1c22;
+  --color-border: #27272a;
+
+  --color-text: #f4f4f5;
+  --color-text-dim: #a1a1aa;
+}
+
+.light {
+  /* Clean Light Theme Palette with High Contrast */
+  --color-bg: #f1f5f9; /* Slate 100 - slightly darker water/bg */
+  --color-surface: #ffffff;
+  --color-surface-hover: #e2e8f0; /* Slate 200 */
+  --color-border: #cbd5e1; /* Slate 300 - much more visible borders */
+
+  --color-text: #0f172a; /* Slate 900 */
+  --color-text-dim: #475569; /* Slate 600 - darker for readability */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-hover);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border);
+}
+
+/* Map pulse animation for user location */
+.pulse-ring {
+  animation: pulse-map 2s ease-in-out infinite;
+}
+
+@keyframes pulse-map {
+  0% {
+    r: 5;
+    opacity: 0.3;
+  }
+  50% {
+    r: 12;
+    opacity: 0;
+  }
+  100% {
+    r: 5;
+    opacity: 0.3;
+  }
+}
+
+/* Connection arc animation */
+.connection-arc {
+  animation: dash-flow 1.5s linear infinite;
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -20;
+  }
+}

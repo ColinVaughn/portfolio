@@ -1,0 +1,164 @@
+# ============================================================
+# Docker Compose for local development/testing
+# Runs 3 relay servers + local Supabase
+#
+# Usage:
+#   1. Run `supabase start` first to get a local Supabase instance
+#   2. Set SUPABASE_SERVICE_ROLE_KEY in your shell or .env file
+#   3. docker compose up --build
+# ============================================================
+
+services:
+  # Local Supabase (use `supabase start` instead for full features)
+  # This is a minimal Postgres for testing
+  postgres:
+    image: supabase/postgres:15.6.1.143
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: supabase
+    ports:
+      - "54322:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./supabase/migrations:/docker-entrypoint-initdb.d
+
+  # Relay Server - Atlanta (Entry)
+  relay-atl:
+    build: .
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    sysctls:
+      - net.ipv4.ip_forward=1
+    environment:
+      RELAY_HOSTNAME: atl-relay-01
+      RELAY_REGION: us-east
+      RELAY_CITY: Atlanta
+      RELAY_COUNTRY_CODE: US
+      RELAY_PUBLIC_IP: relay-atl
+      RELAY_LATITUDE: "33.7490"
+      RELAY_LONGITUDE: "-84.3880"
+      RELAY_MAX_CLIENTS: "50"
+      # When using `supabase start`, use http://host.docker.internal:54321
+      # When using a remote Supabase instance, use https://your-project.supabase.co
+      SUPABASE_URL: ${SUPABASE_URL:-http://host.docker.internal:54321}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-your-key-here}
+      WG_CLIENT_PORT: "51820"
+      WG_MESH_PORT: "51821"
+      WG_KEY_DIR: /etc/relay/keys
+      API_PORT: "8080"
+      QUIC_ENABLED: "true"
+      QUIC_PORT: "443"
+      DNS_FILTER_ENABLED: "true"
+      RUST_LOG: relay_core=debug,relay_quic=debug
+    ports:
+      - "51820:51820/udp"
+      - "8080:8080"
+    volumes:
+      - atl-keys:/etc/relay/keys
+      - atl-tls:/etc/relay/tls
+      - atl-blocklists:/etc/relay/blocklists
+    networks:
+      relay-mesh:
+        ipv4_address: 172.30.0.10
+    depends_on:
+      - postgres
+
+  # Relay Server - New York (Relay)
+  relay-nyc:
+    build: .
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    sysctls:
+      - net.ipv4.ip_forward=1
+    environment:
+      RELAY_HOSTNAME: nyc-relay-01
+      RELAY_REGION: us-east
+      RELAY_CITY: New York
+      RELAY_COUNTRY_CODE: US
+      RELAY_PUBLIC_IP: relay-nyc
+      RELAY_LATITUDE: "40.7128"
+      RELAY_LONGITUDE: "-74.0060"
+      RELAY_MAX_CLIENTS: "50"
+      SUPABASE_URL: ${SUPABASE_URL:-http://host.docker.internal:54321}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-your-key-here}
+      WG_CLIENT_PORT: "51820"
+      WG_MESH_PORT: "51821"
+      WG_KEY_DIR: /etc/relay/keys
+      API_PORT: "8080"
+      QUIC_ENABLED: "true"
+      QUIC_PORT: "443"
+      DNS_FILTER_ENABLED: "true"
+      RUST_LOG: relay_core=debug,relay_quic=debug
+    ports:
+      - "51830:51820/udp"
+      - "8081:8080"
+    volumes:
+      - nyc-keys:/etc/relay/keys
+      - nyc-tls:/etc/relay/tls
+      - nyc-blocklists:/etc/relay/blocklists
+    networks:
+      relay-mesh:
+        ipv4_address: 172.30.0.11
+    depends_on:
+      - postgres
+
+  # Relay Server - London (Exit)
+  relay-lon:
+    build: .
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    sysctls:
+      - net.ipv4.ip_forward=1
+    environment:
+      RELAY_HOSTNAME: lon-relay-01
+      RELAY_REGION: eu-west
+      RELAY_CITY: London
+      RELAY_COUNTRY_CODE: GB
+      RELAY_PUBLIC_IP: relay-lon
+      RELAY_LATITUDE: "51.5074"
+      RELAY_LONGITUDE: "-0.1278"
+      RELAY_MAX_CLIENTS: "50"
+      SUPABASE_URL: ${SUPABASE_URL:-http://host.docker.internal:54321}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-your-key-here}
+      WG_CLIENT_PORT: "51820"
+      WG_MESH_PORT: "51821"
+      WG_KEY_DIR: /etc/relay/keys
+      API_PORT: "8080"
+      QUIC_ENABLED: "true"
+      QUIC_PORT: "443"
+      DNS_FILTER_ENABLED: "true"
+      RUST_LOG: relay_core=debug,relay_quic=debug
+    ports:
+      - "51840:51820/udp"
+      - "8082:8080"
+    volumes:
+      - lon-keys:/etc/relay/keys
+      - lon-tls:/etc/relay/tls
+      - lon-blocklists:/etc/relay/blocklists
+    networks:
+      relay-mesh:
+        ipv4_address: 172.30.0.12
+    depends_on:
+      - postgres
+
+networks:
+  relay-mesh:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+
+volumes:
+  pgdata:
+  atl-keys:
+  atl-tls:
+  atl-blocklists:
+  nyc-keys:
+  nyc-tls:
+  nyc-blocklists:
+  lon-keys:
+  lon-tls:
+  lon-blocklists:
