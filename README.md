@@ -49,7 +49,7 @@ E-commerce platform for custom PC hardware with React, Supabase, Stripe, and Cha
 
 ## Contact
 
-- **Email:** colinvaughn01@gmail.com
+- **Email:** colin@colinvaughn.xyz
 - **LinkedIn:** [linkedin.com/in/colin-vaughn](https://linkedin.com/in/colin-vaughn)
 - **GitHub:** [github.com/colinvaughn](https://github.com/colinvaughn)
 - **Website:** [colinvaughn.xyz](https://colinvaughn.xyz)
