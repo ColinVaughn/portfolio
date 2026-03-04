@@ -5,12 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tunnely / VPN Platform / Colin Vaughn</title>
   <meta name="description" content="Tunnely is a privacy-focused VPN platform built in Rust with WireGuard encryption, mesh networking, channel bonding, and ad blocking.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://colinvaughn.xyz/VPN/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Tunnely / VPN Platform / Colin Vaughn">
+  <meta property="og:description" content="Tunnely is a privacy-focused VPN platform built in Rust with WireGuard encryption, mesh networking, channel bonding, and ad blocking.">
+  <meta property="og:url" content="https://colinvaughn.xyz/VPN/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Tunnely / VPN Platform / Colin Vaughn">
+  <meta name="twitter:description" content="Tunnely is a privacy-focused VPN platform built in Rust with WireGuard encryption, mesh networking, channel bonding, and ad blocking.">
   <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- NAV -->
-<nav class="nav pinned" id="nav">
+<nav class="nav pinned" id="nav" aria-label="Primary navigation">
   <div class="container">
     <a href="../index.html" class="nav-brand">colin<span>.vaughn</span></a>
     <div class="nav-menu" id="navMenu">
@@ -20,19 +30,20 @@
       <a href="../index.html#about">About</a>
       <a href="mailto:colinvaughn01@gmail.com" class="contact-btn">Get in Touch</a>
     </div>
-    <button class="nav-toggle" id="navToggle" aria-label="Menu">
-      <span></span><span></span><span></span>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
     </button>
   </div>
 </nav>
 
 <!-- PROJECT HERO -->
+<main id="main-content">
 <section class="proj-hero">
   <div class="proj-hero-glow"></div>
   <div class="hero-pattern"></div>
   <div class="container" style="position:relative; z-index:1;">
     <a href="../index.html" class="back">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
       Portfolio
     </a>
     <div style="display:flex;align-items:center;gap:12px;"><span class="label" style="margin-bottom:0;">Project / VPN</span><span class="bento-badge" style="color:var(--rose);background:rgba(251,113,133,0.12);font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:5px;">ARR</span></div>
@@ -46,12 +57,12 @@
       Shipped as a polished Tauri desktop app with a Next.js marketing site.
     </p>
     <div class="proj-actions">
-      <a href="https://github.com/ColinVaughn/portfolio/tree/main/VPN" class="btn btn-accent" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      <a href="https://github.com/ColinVaughn/portfolio/tree/main/VPN" class="btn btn-accent" target="_blank" rel="noopener" aria-label="View Tunnely source on GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
         View Source on GitHub
       </a>
-      <a href="https://tunnely.org" class="btn btn-ghost" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <a href="https://tunnely.org" class="btn btn-ghost" target="_blank" rel="noopener" aria-label="Visit tunnely.org">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         Visit tunnely.org
       </a>
     </div>
@@ -182,6 +193,7 @@
     </div>
   </div>
 </section>
+</main>
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -204,13 +216,36 @@
 
   const toggle = document.getElementById('navToggle');
   const menu = document.getElementById('navMenu');
-  toggle.addEventListener('click', () => menu.classList.toggle('open'));
-  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
+  toggle.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    menu.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
 
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Tunnely",
+  "url": "https://tunnely.org",
+  "applicationCategory": "SecurityApplication",
+  "operatingSystem": "Windows, macOS, Linux",
+  "description": "Privacy-first VPN platform built in Rust with WireGuard encryption, mesh networking, channel bonding, and ad blocking.",
+  "author": {
+    "@type": "Person",
+    "name": "Colin Vaughn",
+    "url": "https://colinvaughn.xyz/"
+  }
+}
 </script>
 
 </body>
