@@ -19,6 +19,8 @@ Privacy-first VPN platform built in Rust. WireGuard encryption, multi-relay mesh
 
 **Stack:** Rust, Tauri, Solid.js, TypeScript, WireGuard, Docker, Next.js, Supabase, Stripe
 
+**Source:** [github.com/ColinVaughn/portfolio/tree/main/VPN](https://github.com/ColinVaughn/portfolio/tree/main/VPN)
+
 | Component      | Path                |
 | -------------- | ------------------- |
 | Desktop Client | `VPN/client-app/`   |
