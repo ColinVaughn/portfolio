@@ -30,6 +30,14 @@
       <a href="#about">About</a>
       <a href="mailto:colin@colinvaughn.xyz" class="contact-btn">Get in Touch</a>
     </div>
+    <button class="ship-toggle" id="shipToggle" aria-label="Toggle ship animation" title="Toggle ship animation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="M12 2L8 10h8L12 2z"/>
+        <rect x="9" y="10" width="6" height="8" rx="1"/>
+        <path d="M7 18l2-3M17 18l-2-3"/>
+        <path d="M10 22l1-4M14 22l-1-4"/>
+      </svg>
+    </button>
     <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
       <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
     </button>
@@ -390,6 +398,8 @@
   "knowsAbout": ["Rust", "TypeScript", "AI Systems", "Network Security", "VPN", "Full-Stack Web Development"]
 }
 </script>
+
+<script src="ship-animation.js"></script>
 
 </body>
 </html>

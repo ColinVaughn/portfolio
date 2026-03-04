@@ -186,6 +186,34 @@ body::before {
   border-radius: 1px;
 }
 
+.ship-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.ship-toggle svg { width: 16px; height: 16px; }
+
+.ship-toggle:hover {
+  background: var(--bg-surface);
+  border-color: var(--border-hover);
+}
+
+.ship-toggle.off {
+  color: var(--text-faint);
+  opacity: 0.5;
+}
+
 /* ============ HERO ============ */
 .hero {
   min-height: 100vh;
@@ -283,6 +311,17 @@ body::before {
   filter: blur(180px);
   opacity: 0.05;
   pointer-events: none;
+}
+
+/* Ship particle canvas */
+.hero-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  cursor: pointer;
 }
 
 @keyframes rise {
