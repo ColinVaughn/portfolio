@@ -9,6 +9,7 @@ Personal portfolio site and project showcase.
 ```
 /                   Portfolio site (HTML/CSS)
 /VPN/               Tunnely - VPN platform source code
+/Omni/              Omni - AI agent platform source code
 ```
 
 ## Projects
@@ -29,9 +30,11 @@ Privacy-first VPN platform built in Rust. WireGuard encryption, multi-relay mesh
 
 > **License:** Tunnely is closed source. All Rights Reserved. The source code in `VPN/` is provided for portfolio review purposes only. You may not copy, modify, distribute, or use any part of the Tunnely codebase without explicit written permission.
 
-### Omni (Coming Soon)
+### Omni
 
-Open-source AI agent platform. 10-crate Rust workspace with Tauri + React desktop UI, WASM-sandboxed extensions, and multi-provider LLM orchestration.
+Open-source AI agent platform. 9-crate Rust workspace with Tauri + React desktop UI, WASM-sandboxed extensions, and multi-provider LLM orchestration.
+
+**Source:** [github.com/Omni-App-AI/Omni](https://github.com/Omni-App-AI/Omni)
 
 **License:** MIT
 
