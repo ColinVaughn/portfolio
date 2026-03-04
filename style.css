@@ -597,6 +597,24 @@ body::before {
   pointer-events: none;
 }
 
+.projects-note {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  margin-top: 24px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.projects-note a {
+  color: var(--accent);
+  transition: color 0.2s;
+}
+
+.projects-note a:hover {
+  color: var(--text);
+}
+
 /* ============ EXPERIENCE ============ */
 .exp-list { margin-top: 48px; }
 
