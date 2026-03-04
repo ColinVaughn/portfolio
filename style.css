@@ -214,6 +214,10 @@ body::before {
   opacity: 0.5;
 }
 
+@media (max-width: 768px) {
+  .ship-toggle { display: none; }
+}
+
 /* ============ HERO ============ */
 .hero {
   min-height: 100vh;
