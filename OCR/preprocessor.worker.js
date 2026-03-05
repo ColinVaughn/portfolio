@@ -5,14 +5,13 @@ self.onmessage = function(e) {
   const h = height;
   const len = w * h;
 
-  // 1. Grayscale
+  // Grayscale
   const gray = new Float32Array(len);
   for (let i = 0; i < data.length; i += 4) {
     gray[i / 4] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
   }
 
-  // 2. Fast Median Filter (3x3)
-  // Pre-allocate array to avoid GC overhead
+  // 3x3 median filter
   const window = new Float32Array(9);
   const denoised = new Float32Array(len);
   
@@ -24,7 +23,6 @@ self.onmessage = function(e) {
         continue;
       }
       
-      // Collect neighborhood
       window[0] = gray[(y - 1) * w + (x - 1)];
       window[1] = gray[(y - 1) * w + x];
       window[2] = gray[(y - 1) * w + (x + 1)];
@@ -35,7 +33,6 @@ self.onmessage = function(e) {
       window[7] = gray[(y + 1) * w + x];
       window[8] = gray[(y + 1) * w + (x + 1)];
 
-      // Inline insertion sort for 9 elements (extremely fast compared to Array.sort)
       for (let i = 1; i < 9; i++) {
         let key = window[i];
         let j = i - 1;
@@ -45,38 +42,40 @@ self.onmessage = function(e) {
         }
         window[j + 1] = key;
       }
-      denoised[idx] = window[4]; // Median
+      denoised[idx] = window[4];
     }
   }
 
-  // 3. Unsharp Mask (Sharpening)
-  // Kernel: [[0, -1, 0], [-1, 5, -1], [0, -1, 0]]
-  const sharpened = new Float32Array(len);
+  // 3x3 Gaussian blur [1,2,1; 2,4,2; 1,2,1] / 16
+  const smoothed = new Float32Array(len);
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
       const idx = y * w + x;
       if (x === 0 || x === w - 1 || y === 0 || y === h - 1) {
-        sharpened[idx] = denoised[idx];
+        smoothed[idx] = denoised[idx];
         continue;
       }
-      
-      const val = 5 * denoised[idx] 
-                - denoised[(y - 1) * w + x] 
-                - denoised[y * w + (x - 1)] 
-                - denoised[y * w + (x + 1)] 
-                - denoised[(y + 1) * w + x];
-                
-      sharpened[idx] = Math.max(0, Math.min(255, val));
+
+      const val = (
+          1 * denoised[(y - 1) * w + (x - 1)] +
+          2 * denoised[(y - 1) * w + x] +
+          1 * denoised[(y - 1) * w + (x + 1)] +
+          2 * denoised[y * w + (x - 1)] +
+          4 * denoised[y * w + x] +
+          2 * denoised[y * w + (x + 1)] +
+          1 * denoised[(y + 1) * w + (x - 1)] +
+          2 * denoised[(y + 1) * w + x] +
+          1 * denoised[(y + 1) * w + (x + 1)]
+      ) / 16;
+
+      smoothed[idx] = val;
     }
   }
 
-  // 4. Contrast normalization (histogram stretch)
-  // To find percentiles fast without sorting the entire array, we use an approximation or partial sort.
-  // For production, sorting a full Float32Array of 1M elements still takes 50-100ms in a worker.
-  // A histogram approach is faster for 8-bit equivalent values.
+  // Contrast normalization (histogram stretch, 2% clip)
   const histogram = new Int32Array(256);
   for (let i = 0; i < len; i++) {
-    histogram[Math.floor(sharpened[i])] += 1;
+    histogram[Math.floor(smoothed[i])] += 1;
   }
   
   let clipLow = 0, clipHigh = 255;
@@ -95,10 +94,10 @@ self.onmessage = function(e) {
 
   const contrast = new Float32Array(len);
   for (let i = 0; i < len; i++) {
-    contrast[i] = Math.max(0, Math.min(255, ((sharpened[i] - clipLow) / clipRange) * 255));
+    contrast[i] = Math.max(0, Math.min(255, ((smoothed[i] - clipLow) / clipRange) * 255));
   }
 
-  // 5. Adaptive thresholding (local mean using integral image)
+  // Adaptive thresholding (integral image)
   const integral = new Float64Array((w + 1) * (h + 1));
   for (let y = 0; y < h; y++) {
     let rowSum = 0;
@@ -108,8 +107,8 @@ self.onmessage = function(e) {
     }
   }
 
-  const blockSize = Math.max(15, Math.round(Math.min(w, h) / 20) | 1);
-  const C = 8; 
+  const blockSize = Math.max(15, Math.round(Math.min(w, h) / 30) | 1);
+  const C = 5;
   const halfBlock = Math.floor(blockSize / 2);
 
   for (let y = 0; y < h; y++) {
@@ -135,6 +134,5 @@ self.onmessage = function(e) {
     }
   }
 
-  // Send back
   self.postMessage({ processedData: imageData });
 };

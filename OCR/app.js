@@ -1,10 +1,3 @@
-/**
- * OCR Document Scanner
- * Browser-based document scanning with Tesseract.js
- * Supports fuel receipts, retail receipts, invoices, and general documents
- * Features: image preprocessing, word-level confidence, fraud detection
- */
-
 // DOM refs
 const uploadZone = document.getElementById('uploadZone');
 const fileInput = document.getElementById('fileInput');
@@ -28,17 +21,8 @@ const ocrConfidenceBar = document.getElementById('ocrConfidenceBar');
 const ocrConfidenceVal = document.getElementById('ocrConfidenceVal');
 const ocrConfidenceFill = document.getElementById('ocrConfidenceFill');
 
-// State
 let lastResult = null;
 let isProcessing = false;
-
-// Image Preprocessing Pipeline
-// Pipeline for Tesseract OCR input:
-//   - Upscale small images (Tesseract needs ~30px cap height / 300 DPI)
-//   - Grayscale conversion (weighted luminance)
-//   - Noise reduction (3x3 median filter, edge-preserving)
-//   - Contrast normalization (histogram stretch with 2% clip)
-//   - Adaptive thresholding (local mean, handles uneven lighting)
 
 function preprocessImage(file) {
   return new Promise((resolve, reject) => {
@@ -46,14 +30,13 @@ function preprocessImage(file) {
     img.onload = () => {
       URL.revokeObjectURL(fileUrl);
 
-      // Upscale small images
-      // Tesseract needs ~300 DPI. For standard receipts, width should be at least ~1000-1200px.
+      // Upscale small images so Tesseract has enough resolution
       let targetW = img.width;
       let targetH = img.height;
       const MIN_WIDTH = 1200;
 
       if (img.width < MIN_WIDTH) {
-        const scale = Math.min(MIN_WIDTH / img.width, 3); // Cap at 3x
+        const scale = Math.min(MIN_WIDTH / img.width, 3);
         targetW = Math.round(img.width * scale);
         targetH = Math.round(img.height * scale);
       }
@@ -71,7 +54,6 @@ function preprocessImage(file) {
       const h = canvas.height;
       const imageData = ctx.getImageData(0, 0, w, h);
 
-      // Offload heavy image processing to Web Worker
       const worker = new Worker('preprocessor.worker.js');
       
       worker.onmessage = (e) => {
@@ -105,9 +87,7 @@ function preprocessImage(file) {
 }
 
 
-// ============================================================
-// Upload Handlers
-// ============================================================
+// Upload handlers
 
 uploadZone.addEventListener('click', () => fileInput.click());
 
@@ -141,7 +121,6 @@ fileInput.addEventListener('change', (e) => {
   if (file) processFile(file);
 });
 
-// Sample image handlers
 document.querySelectorAll('.sample-btn').forEach(btn => {
   btn.addEventListener('click', async () => {
     if (isProcessing) return;
@@ -165,32 +144,27 @@ document.querySelectorAll('.sample-btn').forEach(btn => {
   });
 });
 
-// ============================================================
-// Main Processing Pipeline
-// ============================================================
+
+// Main processing pipeline
 
 async function processFile(file) {
   if (isProcessing) return;
   isProcessing = true;
 
-  // Show original preview
   const url = URL.createObjectURL(file);
   previewImg.onload = () => URL.revokeObjectURL(url);
   previewImg.src = url;
   previewImg.style.display = 'block';
   if (preprocessedImg) preprocessedImg.style.display = 'none';
 
-  // Reset preview tabs
   if (previewOrigTab) previewOrigTab.classList.add('active');
   if (previewPrepTab) previewPrepTab.classList.remove('active');
 
-  // Show progress
   progressSection.classList.add('active');
   resultsSection.classList.remove('active');
   updateProgress(0, 'Initializing OCR pipeline...');
 
   try {
-    // Preprocessing
     let ocrInput = file;
     const usePreprocessing = preprocessToggle && preprocessToggle.checked;
 
@@ -199,7 +173,6 @@ async function processFile(file) {
       const preprocessed = await preprocessImage(file);
       ocrInput = preprocessed.blob;
 
-      // Store preprocessed preview (don't show yet - user clicks 'Preprocessed' tab)
       if (preprocessedImg) {
         preprocessedImg.src = preprocessed.previewUrl;
         preprocessedImg.style.display = 'none';
@@ -221,6 +194,13 @@ async function processFile(file) {
       }
     });
 
+    // PSM 6 = single text block, whitelist restricts to receipt chars
+    await worker.setParameters({
+      tessedit_pageseg_mode: '6',
+      tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:-/$#%&*()@+\'"/\\',
+      preserve_interword_spaces: '1',
+    });
+
     const { data } = await worker.recognize(ocrInput);
     const rawText = data.text;
     const words = data.words || [];
@@ -229,21 +209,14 @@ async function processFile(file) {
 
     updateProgress(98, 'Analyzing document...');
 
-    // Detect document type
     const docType = detectDocumentType(rawText);
-
-    // Extract structured data based on document type
     const extracted = extractDocumentData(rawText, docType);
-
-    // Run fraud/validation checks
     const alerts = runFraudDetection(extracted, rawText, docType);
 
-    // Compute word-level confidence
     const avgConfidence = words.length > 0
       ? Math.round(words.reduce((s, w) => s + w.confidence, 0) / words.length)
       : null;
 
-    // Store result
     lastResult = {
       rawText, extracted, alerts, words,
       docType, avgConfidence,
@@ -253,8 +226,6 @@ async function processFile(file) {
     };
 
     updateProgress(100, 'Processing complete');
-
-    // Render results
     renderResults(rawText, extracted, alerts, words, docType, avgConfidence);
 
   } catch (err) {
@@ -265,7 +236,6 @@ async function processFile(file) {
   }
 }
 
-// Preview tab switching
 if (previewOrigTab) {
   previewOrigTab.addEventListener('click', () => {
     previewOrigTab.classList.add('active');
@@ -284,16 +254,14 @@ if (previewPrepTab) {
   });
 }
 
-// Progress UI
 function updateProgress(pct, label) {
   progressFill.style.width = pct + '%';
   progressPct.textContent = pct + '%';
   progressLabel.textContent = label;
 }
 
-// ============================================================
-// Document Type Detection
-// ============================================================
+
+// Document type detection
 
 const DOC_SIGNATURES = {
   fuel: ['PUMP', 'GALLONS', 'GALLON', 'GAL', 'FUEL', 'UNLEADED', 'DIESEL', 'PREMIUM', 'REGULAR', 'PRICE/G', 'PPG', 'OCTANE'],
@@ -314,9 +282,8 @@ function detectDocumentType(text) {
   return 'general';
 }
 
-// ============================================================
-// Key-Value Parser (shared)
-// ============================================================
+
+// Key-value parser
 
 function parseKeyValuePairs(text) {
   const kvMap = {};
@@ -339,9 +306,8 @@ function extractFromKV(kvPairs, keys) {
   return null;
 }
 
-// ============================================================
-// Data Extraction - Dispatcher
-// ============================================================
+
+// Data extraction
 
 function extractDocumentData(text, docType) {
   switch (docType) {
@@ -352,9 +318,8 @@ function extractDocumentData(text, docType) {
   }
 }
 
-// ============================================================
-// Fuel Receipt Extraction
-// ============================================================
+
+// Fuel receipt extraction
 
 const SKIP_WORDS = new Set([
   'WELCOME', 'THANK YOU', 'THANKS', 'HAVE A NICE DAY', 'COME AGAIN',
@@ -526,40 +491,34 @@ function extractPayment(upperText) {
   return null;
 }
 
-// ============================================================
-// Retail Receipt Extraction
-// ============================================================
+
+// Retail receipt extraction
 
 function extractRetailData(text) {
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
   const fullText = text.toUpperCase();
   const kvPairs = parseKeyValuePairs(text);
 
-  // Extract line items: lines with a dollar amount at the end
   const lineItems = [];
   for (const line of lines) {
     const m = line.match(/^(.+?)\s+([\d]+\.[\d]{2})\s*$/);
     if (m) {
       const name = m[1].replace(/[\$]/g, '').trim();
       const price = parseFloat(m[2]);
-      // Skip totals/subtotals/tax lines
       if (!/\b(subtotal|total|tax|balance|change|cash|visa|mastercard|amex|discover|approved)\b/i.test(name)) {
         lineItems.push({ name, price });
       }
     }
   }
 
-  // Extract subtotal
   let subtotal = null;
   const subMatch = text.match(/subtotal[:\s]*\$?\s*([\d]+\.[\d]{2})/i);
   if (subMatch) subtotal = parseFloat(subMatch[1]);
 
-  // Extract tax
   let tax = null;
   const taxMatch = text.match(/tax[:\s]*(?:[\d.]+%\s*)?\$?\s*([\d]+\.[\d]{2})/i);
   if (taxMatch) tax = parseFloat(taxMatch[1]);
 
-  // Item count
   let itemCount = null;
   const itemsMatch = text.match(/items?\s*(?:sold)?[:\s]*(\d+)/i);
   if (itemsMatch) itemCount = parseInt(itemsMatch[1]);
@@ -579,44 +538,38 @@ function extractRetailData(text) {
   };
 }
 
-// ============================================================
-// Invoice Extraction
-// ============================================================
+
+// Invoice extraction
 
 function extractInvoiceData(text) {
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
   const fullText = text.toUpperCase();
   const kvPairs = parseKeyValuePairs(text);
 
-  // Invoice number
   let invoiceNum = extractFromKV(kvPairs, ['INVOICE', 'INVOICE #', 'INVOICE#', 'INV', 'INV#']);
   if (!invoiceNum) {
     const invMatch = text.match(/invoice\s*#?\s*:?\s*([A-Z0-9\-]+)/i);
     if (invMatch) invoiceNum = invMatch[1];
   }
 
-  // PO number
   let poNumber = extractFromKV(kvPairs, ['PO', 'PO #', 'PO#', 'PO NUMBER', 'PURCHASE ORDER']);
   if (!poNumber) {
     const poMatch = text.match(/PO\s*#?\s*:?\s*([A-Z0-9\-]+)/i);
     if (poMatch) poNumber = poMatch[1];
   }
 
-  // Due date
   let dueDate = extractFromKV(kvPairs, ['DUE DATE', 'DUE', 'PAYMENT DUE']);
   if (!dueDate) {
     const dueMatch = text.match(/due\s*date[:\s]*([\d\/\-\.]+)/i);
     if (dueMatch) dueDate = dueMatch[1];
   }
 
-  // Bill-to: look for lines after "BILL TO"
   let billTo = null;
   const billToIdx = lines.findIndex(l => /bill\s*to/i.test(l));
   if (billToIdx >= 0 && billToIdx + 1 < lines.length) {
     billTo = lines[billToIdx + 1];
   }
 
-  // Line items (description + amount pattern)
   const lineItems = [];
   for (const line of lines) {
     const m = line.match(/^(.+?)\s+(\d+)\s+\$?([\d,]+\.[\d]{2})\s+\$?([\d,]+\.[\d]{2})\s*$/);
@@ -630,7 +583,6 @@ function extractInvoiceData(text) {
     }
   }
 
-  // Payment terms
   let paymentTerms = null;
   const termsMatch = text.match(/(?:payment\s*terms?|terms?)\s*:?\s*(net\s*\d+)/i);
   if (termsMatch) paymentTerms = termsMatch[1];
@@ -656,16 +608,14 @@ function extractSubtotal(text) {
   return match ? parseFloat(match[1].replace(/,/g, '')) : null;
 }
 
-// ============================================================
-// General Document Extraction (fallback)
-// ============================================================
+
+// General document extraction (fallback)
 
 function extractGeneralData(text) {
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
   const fullText = text.toUpperCase();
   const kvPairs = parseKeyValuePairs(text);
 
-  // Extract all dollar amounts
   const amounts = [...text.matchAll(/\$\s*([\d,]+\.[\d]{2})/g)].map(m => parseFloat(m[1].replace(/,/g, '')));
 
   return {
@@ -682,14 +632,12 @@ function extractGeneralData(text) {
   };
 }
 
-// ============================================================
-// Fraud / Validation Detection
-// ============================================================
+
+// Fraud / validation checks
 
 function runFraudDetection(data, rawText, docType) {
   const alerts = [];
 
-  // Fuel-specific checks
   if (docType === 'fuel') {
     if (data.pricePerGallon !== null) {
       if (data.pricePerGallon < 2.00 || data.pricePerGallon > 7.00) {
@@ -725,7 +673,6 @@ function runFraudDetection(data, rawText, docType) {
     }
   }
 
-  // Math cross-reference (fuel and retail)
   if (docType === 'fuel' && data.pricePerGallon && data.gallons && data.totalAmount) {
     const expectedTotal = data.pricePerGallon * data.gallons;
     const diff = Math.abs(expectedTotal - data.totalAmount);
@@ -758,7 +705,6 @@ function runFraudDetection(data, rawText, docType) {
     }
   }
 
-  // Duplicate amount detection (universal)
   const amounts = [...rawText.matchAll(/\$?([\d]+\.[\d]{2})/g)].map(m => m[1]);
   const duplicates = amounts.filter((item, idx) => amounts.indexOf(item) !== idx);
   const uniqueDups = [...new Set(duplicates)];
@@ -772,7 +718,6 @@ function runFraudDetection(data, rawText, docType) {
     }
   }
 
-  // Date check (universal)
   const dateField = data.date || data.dueDate;
   if (dateField) {
     alerts.push({ level: 'ok', message: `Transaction date found: ${dateField}` });
@@ -783,7 +728,6 @@ function runFraudDetection(data, rawText, docType) {
     });
   }
 
-  // OCR word count (universal)
   const wordCount = rawText.split(/\s+/).filter(Boolean).length;
   if (wordCount < 10) {
     alerts.push({
@@ -795,9 +739,8 @@ function runFraudDetection(data, rawText, docType) {
   return alerts;
 }
 
-// ============================================================
+
 // Utilities
-// ============================================================
 
 function escapeHtml(str) {
   if (!str) return str;
@@ -806,9 +749,8 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-// ============================================================
-// Render Results
-// ============================================================
+
+// Render results
 
 const DOC_TYPE_LABELS = {
   fuel: 'Fuel Receipt',
@@ -825,14 +767,12 @@ const DOC_TYPE_COLORS = {
 };
 
 function renderResults(rawText, extracted, alerts, words, docType, avgConfidence) {
-  // Document type badge
   if (docTypeBadge) {
     docTypeBadge.textContent = DOC_TYPE_LABELS[docType] || 'Unknown';
     docTypeBadge.style.setProperty('--doc-color', DOC_TYPE_COLORS[docType] || '#888');
     docTypeBadge.style.display = 'inline-flex';
   }
 
-  // OCR confidence bar
   if (ocrConfidenceBar && avgConfidence !== null) {
     ocrConfidenceBar.style.display = 'flex';
     ocrConfidenceVal.textContent = avgConfidence + '%';
@@ -847,7 +787,6 @@ function renderResults(rawText, extracted, alerts, words, docType, avgConfidence
     }
   }
 
-  // Raw text with word-level confidence coloring
   if (words && words.length > 0) {
     rawTextOutput.innerHTML = '';
     const frag = document.createDocumentFragment();
@@ -868,10 +807,8 @@ function renderResults(rawText, extracted, alerts, words, docType, avgConfidence
       span.title = `Confidence: ${Math.round(w.confidence)}%`;
       frag.appendChild(span);
 
-      // Add space or newline between words
       const next = words[i + 1];
       if (next) {
-        // Check if the next word is on a different line
         if (w.line && next.line && w.line.text !== next.line.text) {
           frag.appendChild(document.createTextNode('\n'));
         } else {
@@ -885,7 +822,6 @@ function renderResults(rawText, extracted, alerts, words, docType, avgConfidence
     rawTextOutput.textContent = rawText || '(No text detected)';
   }
 
-  // Extracted data table (dynamic based on document type)
   const fields = getFieldsForType(extracted);
   extractedTable.innerHTML = fields.map(([name, value]) => `
     <tr>
@@ -894,7 +830,6 @@ function renderResults(rawText, extracted, alerts, words, docType, avgConfidence
     </tr>
   `).join('');
 
-  // Fraud alerts
   fraudAlerts.innerHTML = alerts.map(a => `
     <div class="alert-item alert-${a.level}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -909,7 +844,6 @@ function renderResults(rawText, extracted, alerts, words, docType, avgConfidence
     </div>
   `).join('');
 
-  // Show results
   resultsSection.classList.add('active');
   resultsSection.classList.add('fade-in');
 }
@@ -932,7 +866,7 @@ function getFieldsForType(extracted) {
       ];
     case 'retail':
       const itemFields = extracted.lineItems.map((item, i) =>
-        [`Item ${i + 1}`, `${item.name} -- $${item.price.toFixed(2)}`]
+        [`Item ${i + 1}`, `${item.name} - $${item.price.toFixed(2)}`]
       );
       return [
         ['Store', extracted.storeName],
@@ -977,15 +911,14 @@ function getFieldsForType(extracted) {
   }
 }
 
-// ============================================================
-// Export JSON
-// ============================================================
+
+// Export
 
 btnExport.addEventListener('click', () => {
   if (!lastResult) return;
 
   const exportData = { ...lastResult };
-  delete exportData.words; // Don't export raw word data (too large)
+  delete exportData.words;
 
   const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -996,9 +929,8 @@ btnExport.addEventListener('click', () => {
   URL.revokeObjectURL(url);
 });
 
-// ============================================================
+
 // Reset
-// ============================================================
 
 btnReset.addEventListener('click', () => {
   if (isProcessing) return;
