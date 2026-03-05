@@ -5,6 +5,8 @@ This repository contains both proprietary and open-source software.
 PROPRIETARY (All Rights Reserved):
   - Portfolio website (root HTML/CSS files)
   - Tunnely / VPN platform (VPN/ directory)
+  - OCR Document Scanner (OCR/ directory)
+  - Face Detection (FaceDetection/ directory)
   - A11yCore
   - BattleforgePC
 

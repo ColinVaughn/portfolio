@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Face Detection / Colin Vaughn</title>
+  <meta name="description" content="Real-time face detection and tracking running entirely client-side in the browser using face-api.js and TensorFlow.js. Skills demo by Colin Vaughn.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://colinvaughn.xyz/FaceDetection/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Face Detection / Colin Vaughn">
+  <meta property="og:description" content="Real-time face detection and tracking with webcam, running entirely client-side in the browser.">
+  <meta property="og:url" content="https://colinvaughn.xyz/FaceDetection/">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- NAV -->
+<nav class="nav pinned" id="nav" aria-label="Primary navigation">
+  <div class="container">
+    <a href="../index.html" class="nav-brand">colin<span>.vaughn</span></a>
+    <div class="nav-menu" id="navMenu">
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#projects">Projects</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#about">About</a>
+      <a href="mailto:colin@colinvaughn.xyz" class="contact-btn">Get in Touch</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- PROJECT HERO -->
+<main id="main-content">
+<section class="proj-hero">
+  <div class="proj-hero-glow"></div>
+  <div class="hero-pattern"></div>
+  <div class="container" style="position:relative; z-index:1;">
+    <a href="../index.html" class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Portfolio
+    </a>
+    <div style="display:flex;align-items:center;gap:12px;"><span class="label" style="margin-bottom:0;">Project / Machine Vision</span><span class="bento-badge" style="color:var(--rose);background:rgba(251,113,133,0.12);font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:5px;">ARR</span></div>
+    <h1>
+      <span class="pop">Face Detection</span>
+    </h1>
+    <p class="proj-desc">
+      Skills demo recreating a real-time face detection pipeline from past contracted work.
+      The original system is closed-source per contract terms. This demo showcases
+      the same technique - webcam face tracking with bounding boxes and confidence scoring -
+      running entirely client-side in the browser.
+    </p>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <span class="label">01 / Demo</span>
+      <h2 class="heading">Interactive Demo</h2>
+      <p class="subheading">All processing runs in your browser - no data is sent to any server.</p>
+    </div>
+
+    <div class="reveal visible">
+      <p class="demo-desc">Real-time face detection using your webcam. Draws bounding boxes around detected faces with confidence scores.</p>
+
+      <div class="camera-controls">
+        <button class="btn btn-accent" id="btnStartCamera">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          Start Camera
+        </button>
+        <button class="btn btn-ghost" id="btnStopCamera" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          Stop Camera
+        </button>
+      </div>
+
+      <!-- Camera Status -->
+      <div class="camera-status" id="cameraStatus">
+        <div class="camera-status-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+        <div class="camera-status-text">Click "Start Camera" to begin face detection</div>
+      </div>
+
+      <!-- Camera Feed -->
+      <div class="camera-container" id="cameraContainer" style="display:none;">
+        <video id="videoFeed" autoplay muted playsinline></video>
+        <canvas id="overlayCanvas"></canvas>
+        <div class="detection-stats" id="detectionStats">
+          <span id="statFaces">Faces: 0</span>
+          <span id="statFPS">FPS: --</span>
+          <span id="statConf">Confidence: --</span>
+        </div>
+      </div>
+
+      <!-- Loading indicator for model -->
+      <div class="model-loading" id="modelLoading" style="display:none;">
+        <div class="progress-bar" style="margin-top:0;">
+          <div class="progress-fill" style="width:100%;animation:pulse 1.5s ease-in-out infinite;"></div>
+        </div>
+        <span class="progress-label" id="modelLoadLabel">Loading face detection model…</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <span class="label">02 / Pipeline</span>
+      <h2 class="heading">How It Works</h2>
+      <p class="subheading">Client-side processing pipeline. No data leaves your browser.</p>
+    </div>
+    <div class="card-grid">
+      <div class="card reveal">
+        <span class="card-emoji">01</span>
+        <h3>Model Loading</h3>
+        <p>TinyFaceDetector model loads from CDN on first use. Lightweight architecture optimized for real-time performance in the browser, powered by TensorFlow.js WASM backend.</p>
+        <div class="card-tags">
+          <span>face-api.js</span><span>TensorFlow.js</span><span>CDN</span>
+        </div>
+      </div>
+      <div class="card reveal">
+        <span class="card-emoji">02</span>
+        <h3>Video Capture</h3>
+        <p>WebRTC getUserMedia API streams the webcam feed into a video element. Canvas overlay is sized to match the video dimensions for accurate bounding box placement.</p>
+        <div class="card-tags">
+          <span>WebRTC</span><span>getUserMedia</span><span>Canvas</span>
+        </div>
+      </div>
+      <div class="card reveal">
+        <span class="card-emoji">03</span>
+        <h3>Detection Loop</h3>
+        <p>Each video frame is passed through TinyFaceDetector inference. Detected faces get bounding boxes with corner accents and confidence score labels, rendered at 30+ FPS via requestAnimationFrame.</p>
+        <div class="card-tags">
+          <span>Real-Time Inference</span><span>Canvas Rendering</span><span>requestAnimationFrame</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <span class="label">03 / Stack</span>
+      <h2 class="heading">Technology</h2>
+    </div>
+    <div class="skills-row reveal">
+      <div class="skill-block">
+        <div class="skill-block-title"><span class="dot green"></span> Languages</div>
+        <div class="tags">
+          <span class="tag">JavaScript</span>
+          <span class="tag">HTML / CSS</span>
+        </div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-block-title"><span class="dot teal"></span> Libraries</div>
+        <div class="tags">
+          <span class="tag">face-api.js</span>
+          <span class="tag">TensorFlow.js</span>
+        </div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-block-title"><span class="dot blue"></span> Techniques</div>
+        <div class="tags">
+          <span class="tag">Face Detection</span>
+          <span class="tag">Real-Time Video Processing</span>
+          <span class="tag">WebRTC</span>
+          <span class="tag">Canvas Overlay Rendering</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-copy">&copy; 2026 Colin Vaughn &middot; Skills demo of contracted work. Original project is All Rights Reserved.</div>
+      <div class="footer-links">
+        <a href="../index.html">Portfolio</a>
+        <a href="mailto:colin@colinvaughn.xyz">Email</a>
+        <a href="https://linkedin.com/in/colin-vaughn" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/colinvaughn" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('pinned', scrollY > 50));
+  const toggle = document.getElementById('navToggle');
+  const menu = document.getElementById('navMenu');
+  toggle.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    menu.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+
+  // Reveal animations
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1/dist/face-api.js"></script>
+<script src="face.js"></script>
+</body>
+</html>
