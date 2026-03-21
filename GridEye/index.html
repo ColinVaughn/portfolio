@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GridEye / Geospatial Intelligence Platform / Colin Vaughn</title>
+  <meta name="description" content="GridEye is a real-time geospatial intelligence platform that aggregates OSINT from 10+ sources, geolocates events with NLP, and visualizes them on an interactive map.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://colinvaughn.xyz/GridEye/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="GridEye / Geospatial Intelligence Platform / Colin Vaughn">
+  <meta property="og:description" content="GridEye is a real-time geospatial intelligence platform that aggregates OSINT from 10+ sources, geolocates events with NLP, and visualizes them on an interactive map.">
+  <meta property="og:url" content="https://colinvaughn.xyz/GridEye/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="GridEye / Geospatial Intelligence Platform / Colin Vaughn">
+  <meta name="twitter:description" content="GridEye is a real-time geospatial intelligence platform that aggregates OSINT from 10+ sources, geolocates events with NLP, and visualizes them on an interactive map.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- NAV -->
+<nav class="nav pinned" id="nav" aria-label="Primary navigation">
+  <div class="container">
+    <a href="../" class="nav-brand">colin<span>.vaughn</span></a>
+    <div class="nav-menu" id="navMenu">
+      <a href="../#skills">Skills</a>
+      <a href="../#projects">Projects</a>
+      <a href="../#experience">Experience</a>
+      <a href="../#about">About</a>
+      <a href="mailto:colin@colinvaughn.xyz" class="contact-btn">Get in Touch</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- PROJECT HERO -->
+<main id="main-content">
+<section class="proj-hero">
+  <div class="proj-hero-glow" style="background:var(--accent-secondary);"></div>
+  <div class="hero-pattern"></div>
+  <div class="container" style="position:relative; z-index:1;">
+    <a href="../" class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Portfolio
+    </a>
+    <div style="display:flex;align-items:center;gap:12px;"><span class="label" style="margin-bottom:0;">Project / OSINT Platform</span><span class="bento-badge" style="color:var(--accent-secondary);background:var(--accent-secondary-dim);font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:5px;">GPL</span></div>
+    <h1>
+      <span class="pop" style="color:var(--accent-secondary);">GridEye</span>
+    </h1>
+    <p class="proj-desc">
+      A real-time geospatial intelligence platform. Aggregates breaking events from 10+ OSINT sources
+      including Telegram, RSS feeds, Twitter/X, Reddit, ACLED, and GDACS. Extracts locations with NLP,
+      plots events on an interactive map with live WebSocket updates, AI-powered summarization,
+      confidence scoring, and semantic deduplication. Designed to be self-hosted via Docker Compose.
+    </p>
+    <div class="proj-actions">
+      <a href="https://grideye.live" class="btn btn-accent" style="background:var(--accent-secondary);color:#0b0b0e;" target="_blank" rel="noopener" aria-label="Visit grideye.live">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Visit grideye.live
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <span class="label">01 / Architecture</span>
+      <h2 class="heading">System Design</h2>
+      <p class="subheading">Turborepo monorepo with three apps: web, websocket, and workers. Fully containerized with Docker Compose.</p>
+    </div>
+    <div class="card-grid">
+      <div class="card reveal">
+        <span class="card-emoji">01</span>
+        <h3>Web Application</h3>
+        <p>Next.js 16 App Router with React 19 and TypeScript. Full-screen MapLibre GL JS map with clustered event markers, chronological sidebar feed, saved filter presets, and admin dashboard. Zustand for state, TanStack Query for server cache.</p>
+        <div class="card-tags">
+          <span>Next.js</span><span>React</span><span>MapLibre</span><span>Zustand</span><span>TanStack Query</span>
+        </div>
+      </div>
+      <div class="card reveal">
+        <span class="card-emoji">02</span>
+        <h3>Worker Pipeline</h3>
+        <p>Node.js 22 worker processes orchestrated by BullMQ job queues. Scrapes 10+ sources on configurable intervals: Telegram channels via MTProto, RSS feeds, Twitter/X API v2, Reddit API, ACLED, GDACS, and scanner feeds. Each source is an isolated adapter with retry and rate-limit handling.</p>
+        <div class="card-tags">
+          <span>Node.js</span><span>BullMQ</span><span>Playwright</span><span>RSS Parser</span>
+        </div>
+      </div>
+      <div class="card reveal">
+        <span class="card-emoji">03</span>
+        <h3>WebSocket Server</h3>
+        <p>Standalone real-time event server. Broadcasts new events to all connected map clients the moment they are ingested and geolocated. Handles connection lifecycle, heartbeats, and room-based filtering for regional subscriptions.</p>
+        <div class="card-tags">
+          <span>WebSocket</span><span>Node.js</span><span>Redis Pub/Sub</span>
+        </div>
+      </div>
+      <div class="card reveal">
+        <span class="card-emoji">04</span>
+        <h3>Data Layer</h3>
+        <p>PostgreSQL 17 with PostGIS for geospatial indexing and spatial queries. pgvector extension for semantic embedding storage and deduplication. Redis for job queues, caching, and pub/sub. Drizzle ORM for type-safe schema management and migrations.</p>
+        <div class="card-tags">
+          <span>PostgreSQL</span><span>PostGIS</span><span>pgvector</span><span>Redis</span><span>Drizzle</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <span class="label">02 / Features</span>
+      <h2 class="heading">Under the Hood</h2>
+      <p class="subheading">The technical details that power real-time global event intelligence.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat reveal">
+        <div class="feat-title"><span class="fe">&#9670;</span> Multi-Source OSINT Aggregation</div>
+        <p>Ingests from Telegram channels via MTProto API, RSS/Atom feeds, Twitter/X API v2, Reddit API, ACLED conflict data, GDACS disaster alerts, and local scanner feeds. Each adapter handles authentication, pagination, rate limits, and source-specific parsing independently.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-title"><span class="fe">&#9670;</span> NLP Geolocation</div>
+        <p>Extracts geographic references from unstructured event text using natural language processing. Resolves place names to coordinates via Nominatim geocoding with fuzzy matching, disambiguation, and confidence thresholds. Supports multilingual input via LibreTranslate.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-title"><span class="fe">&#9670;</span> Real-Time Map Visualization</div>
+        <p>Interactive MapLibre GL JS map with WebGL rendering. Live event markers with category-based icons, density clustering at high zoom levels, popup detail cards, and smooth animated transitions. Filter by source, category, time range, and saved presets.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-title"><span class="fe">&#9670;</span> AI Summarization</div>
+        <p>Automated event summarization that distills raw source data into structured intelligence briefs. Includes confidence scoring based on source reliability, cross-reference count, and geolocation precision. Highlights key entities, locations, and temporal references.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-title"><span class="fe">&#9670;</span> Semantic Deduplication</div>
+        <p>Generates vector embeddings for each event using Transformers.js. Stores embeddings in pgvector and performs cosine similarity searches to detect and merge duplicate reports from different sources, preventing map clutter while preserving unique information.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-title"><span class="fe">&#9670;</span> Self-Hosted Infrastructure</div>
+        <p>Full Docker Compose deployment with Caddy reverse proxy for automatic HTTPS. MinIO for S3-compatible media storage. All services containerized with health checks, volume persistence, and environment-based configuration. Zero vendor lock-in.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <span class="label">03 / Stack</span>
+      <h2 class="heading">Technology</h2>
+    </div>
+    <div class="skills-row reveal">
+      <div class="skill-block">
+        <div class="skill-block-title"><span class="dot green"></span> Languages</div>
+        <div class="tags">
+          <span class="tag">TypeScript</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">SQL</span>
+          <span class="tag">HTML / CSS</span>
+        </div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-block-title"><span class="dot teal"></span> Frameworks</div>
+        <div class="tags">
+          <span class="tag">Next.js 16</span>
+          <span class="tag">React 19</span>
+          <span class="tag">MapLibre GL JS</span>
+          <span class="tag">Zustand</span>
+          <span class="tag">TanStack Query</span>
+          <span class="tag">Tailwind CSS</span>
+          <span class="tag">shadcn/ui</span>
+          <span class="tag">Drizzle ORM</span>
+          <span class="tag">BullMQ</span>
+        </div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-block-title"><span class="dot blue"></span> Infrastructure</div>
+        <div class="tags">
+          <span class="tag">PostgreSQL 17</span>
+          <span class="tag">PostGIS</span>
+          <span class="tag">pgvector</span>
+          <span class="tag">Redis</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Caddy</span>
+          <span class="tag">MinIO</span>
+          <span class="tag">WebSocket</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-copy">&copy; 2026 Colin Vaughn &middot; GridEye is licensed under GPL.</div>
+      <div class="footer-links">
+        <a href="../">Portfolio</a>
+        <a href="mailto:colin@colinvaughn.xyz">Email</a>
+        <a href="https://linkedin.com/in/colin-vaughn" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/colinvaughn" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('pinned', scrollY > 50));
+
+  const toggle = document.getElementById('navToggle');
+  const menu = document.getElementById('navMenu');
+  toggle.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    menu.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "GridEye",
+  "url": "https://grideye.live",
+  "applicationCategory": "UtilitiesApplication",
+  "description": "Real-time geospatial intelligence platform that aggregates OSINT from 10+ sources, geolocates events with NLP, and visualizes them on an interactive map.",
+  "license": "https://opensource.org/licenses/GPL-3.0",
+  "author": {
+    "@type": "Person",
+    "name": "Colin Vaughn",
+    "url": "https://colinvaughn.xyz/"
+  }
+}
+</script>
+
+</body>
+</html>
